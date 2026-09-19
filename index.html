@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadowcraft — CSS Effect Tools</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f7f7f5; --surface: #ffffff; --surface-soft: #fbfbfa;
+    --border: #e7e5e1; --text: #1f1f1d; --text-muted: #7a7772;
+    --accent: #3d3a34; --accent-soft: #eceae5; --code-bg: #f2f1ee;
+    --radius-lg: 18px; --radius-md: 12px; --radius-sm: 8px;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  body{ background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+  a{ text-decoration: none; color: inherit; }
+
+  .site-nav{
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px; max-width: 1180px; margin: 0 auto;
+  }
+  .site-logo{ display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 600; }
+  .logo-mark{ width: 30px; height: 30px; border-radius: 8px; background: var(--accent); box-shadow: 6px 6px 0 0 var(--accent-soft); flex-shrink: 0; }
+  .nav-links{ display: flex; gap: 28px; font-size: 0.9rem; color: var(--text-muted); }
+  .nav-links a:hover{ color: var(--text); }
+
+  #hero{ max-width: 780px; margin: 0 auto; padding: 90px 24px 60px; text-align: center; }
+  #hero h1{ font-size: 2.75rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 18px; }
+  #hero p{ color: var(--text-muted); font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+
+  .hero-shapes{ display: flex; justify-content: center; gap: 18px; margin: 48px 0 64px; }
+  .hero-shape{ width: 70px; height: 70px; background: var(--surface); border-radius: var(--radius-md); }
+
+  .tools-section{ max-width: 1180px; margin: 0 auto; padding: 0 24px 100px; }
+  .tools-section h2{ font-size: 1.4rem; font-weight: 600; margin-bottom: 8px; }
+  .tools-section > p{ color: var(--text-muted); font-size: 0.95rem; margin-bottom: 36px; }
+
+  .tool-card{
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 32px; height: 100%; display: flex; flex-direction: column; gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tool-card:hover{ transform: translateY(-4px); box-shadow: 0 16px 32px rgba(31,31,29,0.08); }
+  .tool-icon{ width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+  .tool-card h3{ font-size: 1.1rem; font-weight: 600; margin: 0; }
+  .tool-card p{ color: var(--text-muted); font-size: 0.9rem; margin: 0; flex-grow: 1; }
+  .tool-link{ font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+  .tool-link .arrow{ transition: transform 0.15s ease; }
+  .tool-card:hover .arrow{ transform: translateX(4px); }
+
+  @media (max-width: 767px){
+    .site-nav{ padding: 20px 24px; flex-direction: column; gap: 14px; }
+    #hero{ padding: 60px 24px 40px; }
+    #hero h1{ font-size: 2.1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-logo"><span class="logo-mark"></span>Shadowcraft</div>
+  <div class="nav-links">
+    <a href="box-shadow.html">Box Shadow</a>
+    <a href="gradient.html">Gradient</a>
+    <a href="text-shadow.html">Text Shadow</a>
+  </div>
+</nav>
+
+<section id="hero">
+  <h1>A small toolkit for CSS effects.</h1>
+  <p>Pick a tool, drag a few sliders, and copy clean, ready-to-paste CSS. No trial and error.</p>
+  <div class="hero-shapes">
+    <div class="hero-shape" id="shape1"></div>
+    <div class="hero-shape" id="shape2"></div>
+    <div class="hero-shape" id="shape3"></div>
+  </div>
+</section>
+
+<section class="tools-section">
+  <h2>Tools</h2>
+  <p>Each one opens on its own page.</p>
+  <div class="row g-4">
+    <div class="col-12 col-md-4">
+      <div class="tool-card" data-card>
+        <div class="tool-icon">▢</div>
+        <h3>Box Shadow</h3>
+        <p>Offset, blur, spread, and a color + opacity picker — dial in a shadow visually.</p>
+        <a class="tool-link" href="box-shadow.html">Open tool <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="tool-card" data-card>
+        <div class="tool-icon">◐</div>
+        <h3>Gradient</h3>
+        <p>Linear or radial, multiple color stops, adjustable angle — build gradients fast.</p>
+        <a class="tool-link" href="gradient.html">Open tool <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="tool-card" data-card>
+        <div class="tool-icon">Aa</div>
+        <h3>Text Shadow</h3>
+        <p>Offset, blur, and color + opacity for text — soft glows to hard drop shadows.</p>
+        <a class="tool-link" href="text-shadow.html">Open tool <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+  // Entrance animation: hero text, then floating preview shapes, then tool cards.
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+  tl.from(".site-nav", { opacity: 0, y: -16, duration: 0.6 })
+    .from("#hero h1", { opacity: 0, y: 24, duration: 0.7 }, "-=0.3")
+    .from("#hero p", { opacity: 0, y: 16, duration: 0.6 }, "-=0.4")
+    .from(".hero-shape", { opacity: 0, y: 30, scale: 0.8, stagger: 0.12, duration: 0.6 }, "-=0.2")
+    .from("[data-card]", { opacity: 0, y: 24, stagger: 0.1, duration: 0.6 }, "-=0.2");
+
+  // Gentle continuous float on the three hero shapes, each slightly offset in timing.
+  gsap.to("#shape1", { y: -10, boxShadow: "8px 16px 24px rgba(31,31,29,0.18)", duration: 2, yoyo: true, repeat: -1, ease: "sine.inOut" });
+  gsap.to("#shape2", { y: -14, boxShadow: "6px 20px 28px rgba(31,31,29,0.16)", duration: 2.4, yoyo: true, repeat: -1, ease: "sine.inOut", delay: 0.3 });
+  gsap.to("#shape3", { y: -8,  boxShadow: "10px 14px 22px rgba(31,31,29,0.2)",  duration: 2.2, yoyo: true, repeat: -1, ease: "sine.inOut", delay: 0.6 });
+</script>
+</body>
+</html>

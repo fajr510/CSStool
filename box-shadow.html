@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box Shadow — Shadowcraft</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f7f7f5; --surface: #ffffff; --surface-soft: #fbfbfa;
+    --border: #e7e5e1; --text: #1f1f1d; --text-muted: #7a7772;
+    --accent: #3d3a34; --accent-soft: #eceae5; --code-bg: #f2f1ee;
+    --radius-lg: 18px; --radius-md: 12px; --radius-sm: 8px;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  body{ background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+  a{ text-decoration: none; color: inherit; }
+
+  .site-nav{ display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; max-width: 1180px; margin: 0 auto; }
+  .site-logo{ display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 600; }
+  .logo-mark{ width: 30px; height: 30px; border-radius: 8px; background: var(--accent); box-shadow: 6px 6px 0 0 var(--accent-soft); flex-shrink: 0; }
+  .back-link{ font-size: 0.85rem; color: var(--text-muted); }
+  .back-link:hover{ color: var(--text); }
+
+  .page-title{ max-width: 1180px; margin: 0 auto; padding: 8px 48px 32px; }
+  .page-title h1{ font-size: 1.9rem; font-weight: 700; margin-bottom: 6px; }
+  .page-title p{ color: var(--text-muted); margin: 0; }
+
+  .page-wrap{ max-width: 1180px; margin: 0 auto; padding: 0 24px 80px; }
+  .panel{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; }
+
+  .control-group{ margin-bottom: 30px; }
+  .control-group:last-of-type{ margin-bottom: 0; }
+  .control-label{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .control-label span.name{ font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .control-label span.value{ font-size: 0.85rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+  input[type="range"].minimal-range{
+    -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+    border-radius: 4px; background: var(--border); outline: none;
+  }
+  input[type="range"].minimal-range::-webkit-slider-thumb{
+    -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border);
+    cursor: pointer; transition: transform 0.15s ease;
+  }
+  input[type="range"].minimal-range::-webkit-slider-thumb:hover{ transform: scale(1.15); }
+  input[type="range"].minimal-range::-moz-range-thumb{
+    width: 18px; height: 18px; border-radius: 50%; background: var(--accent);
+    border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+  }
+
+  /* ---------- Color + opacity picker block ---------- */
+  .color-picker-block{ padding-top: 6px; }
+  .color-picker-row{ display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .color-swatch{
+    width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--border);
+    flex-shrink: 0; background-image:
+      linear-gradient(45deg, #ddd 25%, transparent 25%), linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ddd 75%), linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-size: 10px 10px; background-position: 0 0, 0 5px, 5px -5px, -5px 0px;
+  }
+  .color-swatch-fill{ width: 100%; height: 100%; border-radius: 11px; }
+  .color-picker-row input[type="color"]{
+    width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; padding: 0; background: none; cursor: pointer;
+  }
+  .color-code{ font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.8rem; color: var(--text-muted); }
+
+  .switch-row{ display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+  .switch{ position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+  .switch input{ opacity: 0; width: 0; height: 0; }
+  .switch .track{ position: absolute; inset: 0; background: var(--border); border-radius: 999px; cursor: pointer; transition: background 0.15s ease; }
+  .switch .track::before{ content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: var(--surface); border-radius: 50%; transition: transform 0.15s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+  .switch input:checked + .track{ background: var(--accent); }
+  .switch input:checked + .track::before{ transform: translateX(18px); }
+  .switch-row label{ font-size: 0.85rem; color: var(--text-muted); }
+
+  .preview-stage{
+    background: var(--surface-soft); border: 1px solid var(--border); border-radius: var(--radius-md);
+    min-height: 320px; display: flex; align-items: center; justify-content: center; padding: 40px; margin-bottom: 28px;
+  }
+  .preview-box{ width: 160px; height: 160px; background: var(--surface); border-radius: var(--radius-md); }
+
+  .code-block-label{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .code-block-label span{ font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  textarea#cssOutput{
+    width: 100%; resize: none; background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    color: var(--text); font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; padding: 16px; height: 120px;
+  }
+  textarea#cssOutput:focus{ outline: none; border-color: var(--accent); }
+  .copy-btn{ background: var(--accent); color: var(--surface); border: none; border-radius: var(--radius-sm); padding: 10px 20px; font-size: 0.85rem; font-weight: 500; transition: opacity 0.15s ease; }
+  .copy-btn:hover{ opacity: 0.85; }
+  .copy-btn.copied{ background: #4a7c59; }
+  .reset-btn{ background: none; border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius-sm); padding: 10px 20px; font-size: 0.85rem; transition: background 0.15s ease; }
+  .reset-btn:hover{ background: var(--accent-soft); color: var(--text); }
+  .actions-row{ display: flex; gap: 12px; margin-top: 16px; }
+
+  @media (max-width: 767px){
+    .site-nav{ padding: 20px 24px; }
+    .page-title{ padding: 8px 24px 24px; }
+    .panel{ padding: 24px; }
+    .preview-stage{ padding: 24px; min-height: 220px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="site-logo"><span class="logo-mark"></span>Shadowcraft</a>
+  <a href="index.html" class="back-link">← All tools</a>
+</nav>
+
+<div class="page-title">
+  <h1>Box Shadow</h1>
+  <p>Shape the offset, blur, spread, and color — copy the CSS when it looks right.</p>
+</div>
+
+<div class="page-wrap">
+  <div class="row g-4">
+
+    <div class="col-12 col-lg-5">
+      <div class="panel h-100" id="controlsPanel">
+
+        <div class="control-group">
+          <div class="control-label"><span class="name">Horizontal Offset</span><span class="value" id="hOffsetValue">10px</span></div>
+          <input type="range" class="minimal-range" id="hOffset" min="-50" max="50" value="10">
+        </div>
+        <div class="control-group">
+          <div class="control-label"><span class="name">Vertical Offset</span><span class="value" id="vOffsetValue">10px</span></div>
+          <input type="range" class="minimal-range" id="vOffset" min="-50" max="50" value="10">
+        </div>
+        <div class="control-group">
+          <div class="control-label"><span class="name">Blur Radius</span><span class="value" id="blurValue">20px</span></div>
+          <input type="range" class="minimal-range" id="blur" min="0" max="100" value="20">
+        </div>
+        <div class="control-group">
+          <div class="control-label"><span class="name">Spread</span><span class="value" id="spreadValue">0px</span></div>
+          <input type="range" class="minimal-range" id="spread" min="-50" max="50" value="0">
+        </div>
+
+        <!-- Color + opacity picker -->
+        <div class="control-group color-picker-block">
+          <div class="control-label"><span class="name">Color &amp; Opacity</span><span class="value" id="opacityValue">25%</span></div>
+          <div class="color-picker-row">
+            <div class="color-swatch"><div class="color-swatch-fill" id="colorSwatchFill"></div></div>
+            <input type="color" id="shadowColor" value="#1f1f1d">
+            <span class="color-code" id="colorCode">rgba(31, 31, 29, 0.25)</span>
+          </div>
+          <input type="range" class="minimal-range" id="opacity" min="0" max="100" value="25">
+        </div>
+
+        <div class="control-group">
+          <div class="switch-row">
+            <label for="insetToggle">Inset</label>
+            <span class="switch">
+              <input type="checkbox" id="insetToggle">
+              <span class="track" onclick="document.getElementById('insetToggle').click()"></span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="panel h-100" id="previewPanel">
+        <div class="preview-stage"><div class="preview-box" id="previewBox"></div></div>
+        <div class="code-block-label"><span>Generated CSS</span></div>
+        <textarea id="cssOutput" readonly spellcheck="false"></textarea>
+        <div class="actions-row">
+          <button class="copy-btn" id="copyBtn" type="button">Copy Code</button>
+          <button class="reset-btn" id="resetBtn" type="button">Reset</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const hOffsetInput = document.getElementById('hOffset');
+  const vOffsetInput = document.getElementById('vOffset');
+  const blurInput    = document.getElementById('blur');
+  const spreadInput  = document.getElementById('spread');
+  const opacityInput = document.getElementById('opacity');
+  const colorInput   = document.getElementById('shadowColor');
+  const insetInput   = document.getElementById('insetToggle');
+
+  const hOffsetValue = document.getElementById('hOffsetValue');
+  const vOffsetValue = document.getElementById('vOffsetValue');
+  const blurValue    = document.getElementById('blurValue');
+  const spreadValue  = document.getElementById('spreadValue');
+  const opacityValue = document.getElementById('opacityValue');
+  const colorCode    = document.getElementById('colorCode');
+  const swatchFill   = document.getElementById('colorSwatchFill');
+
+  const previewBox = document.getElementById('previewBox');
+  const cssOutput  = document.getElementById('cssOutput');
+  const copyBtn    = document.getElementById('copyBtn');
+  const resetBtn   = document.getElementById('resetBtn');
+
+  const defaults = { hOffset: 10, vOffset: 10, blur: 20, spread: 0, opacity: 25, color: '#1f1f1d', inset: false };
+
+  function hexToRgb(hex){
+    const c = hex.replace('#', '');
+    return `${parseInt(c.substring(0,2),16)}, ${parseInt(c.substring(2,4),16)}, ${parseInt(c.substring(4,6),16)}`;
+  }
+
+  function updateShadow(){
+    const h = hOffsetInput.value, v = vOffsetInput.value, blur = blurInput.value, spread = spreadInput.value;
+    const opacity = (opacityInput.value / 100).toFixed(2);
+    const rgb = hexToRgb(colorInput.value);
+    const inset = insetInput.checked ? 'inset ' : '';
+
+    hOffsetValue.textContent = `${h}px`;
+    vOffsetValue.textContent = `${v}px`;
+    blurValue.textContent    = `${blur}px`;
+    spreadValue.textContent  = `${spread}px`;
+    opacityValue.textContent = `${opacityInput.value}%`;
+
+    const rgbaString = `rgba(${rgb}, ${opacity})`;
+    colorCode.textContent = rgbaString;
+    swatchFill.style.background = rgbaString;
+
+    const shadowValue = `${inset}${h}px ${v}px ${blur}px ${spread}px ${rgbaString}`;
+    previewBox.style.boxShadow = shadowValue;
+    cssOutput.value = `box-shadow: ${shadowValue};`;
+  }
+
+  [hOffsetInput, vOffsetInput, blurInput, spreadInput, opacityInput, colorInput, insetInput]
+    .forEach(input => input.addEventListener('input', updateShadow));
+
+  copyBtn.addEventListener('click', async () => {
+    try{ await navigator.clipboard.writeText(cssOutput.value); }
+    catch(err){ cssOutput.select(); document.execCommand('copy'); }
+    copyBtn.textContent = 'Copied!';
+    copyBtn.classList.add('copied');
+    setTimeout(() => { copyBtn.textContent = 'Copy Code'; copyBtn.classList.remove('copied'); }, 1500);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    hOffsetInput.value = defaults.hOffset; vOffsetInput.value = defaults.vOffset;
+    blurInput.value = defaults.blur; spreadInput.value = defaults.spread;
+    opacityInput.value = defaults.opacity; colorInput.value = defaults.color; insetInput.checked = defaults.inset;
+    updateShadow();
+  });
+
+  updateShadow();
+
+  gsap.from(".site-nav", { opacity: 0, y: -16, duration: 0.5 });
+  gsap.from(".page-title", { opacity: 0, y: 16, duration: 0.5, delay: 0.1 });
+  gsap.from("#controlsPanel", { opacity: 0, x: -20, duration: 0.5, delay: 0.2 });
+  gsap.from("#previewPanel",  { opacity: 0, x: 20,  duration: 0.5, delay: 0.25 });
+</script>
+</body>
+</html>

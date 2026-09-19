@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Shadow — Shadowcraft</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  :root{
+    --bg: #f7f7f5; --surface: #ffffff; --surface-soft: #fbfbfa;
+    --border: #e7e5e1; --text: #1f1f1d; --text-muted: #7a7772;
+    --accent: #3d3a34; --accent-soft: #eceae5; --code-bg: #f2f1ee;
+    --radius-lg: 18px; --radius-md: 12px; --radius-sm: 8px;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  body{ background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+  a{ text-decoration: none; color: inherit; }
+  .site-nav{ display: flex; align-items: center; justify-content: space-between; padding: 24px 48px; max-width: 1180px; margin: 0 auto; }
+  .site-logo{ display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 600; }
+  .logo-mark{ width: 30px; height: 30px; border-radius: 8px; background: var(--accent); box-shadow: 6px 6px 0 0 var(--accent-soft); flex-shrink: 0; }
+  .back-link{ font-size: 0.85rem; color: var(--text-muted); }
+  .back-link:hover{ color: var(--text); }
+  .page-title{ max-width: 1180px; margin: 0 auto; padding: 8px 48px 32px; }
+  .page-title h1{ font-size: 1.9rem; font-weight: 700; margin-bottom: 6px; }
+  .page-title p{ color: var(--text-muted); margin: 0; }
+  .page-wrap{ max-width: 1180px; margin: 0 auto; padding: 0 24px 80px; }
+  .panel{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; }
+
+  .control-group{ margin-bottom: 28px; }
+  .control-label{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .control-label span.name{ font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .control-label span.value{ font-size: 0.85rem; color: var(--text-muted); }
+
+  input[type="range"].minimal-range{
+    -webkit-appearance: none; appearance: none; width: 100%; height: 4px; border-radius: 4px; background: var(--border); outline: none;
+  }
+  input[type="range"].minimal-range::-webkit-slider-thumb{
+    -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%;
+    background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+  }
+  input[type="range"].minimal-range::-moz-range-thumb{
+    width: 18px; height: 18px; border-radius: 50%; background: var(--accent); border: 3px solid var(--surface); box-shadow: 0 0 0 1px var(--border); cursor: pointer;
+  }
+
+  .color-picker-row{ display: flex; align-items: center; gap: 14px; }
+  .color-picker-row input[type="color"]{ width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; padding: 0; background: none; cursor: pointer; }
+  .color-code{ font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.8rem; color: var(--text-muted); }
+
+  .preview-stage{
+    background: var(--surface-soft); border: 1px solid var(--border); border-radius: var(--radius-md);
+    min-height: 280px; display: flex; align-items: center; justify-content: center; padding: 40px; margin-bottom: 28px;
+  }
+  #previewText{ font-size: 3rem; font-weight: 700; color: var(--text); text-align: center; word-break: break-word; }
+
+  .code-block-label{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .code-block-label span{ font-size: 0.85rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  textarea#cssOutput{
+    width: 100%; resize: none; background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    color: var(--text); font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85rem; line-height: 1.6; padding: 16px; height: 90px;
+  }
+  .copy-btn{ background: var(--accent); color: var(--surface); border: none; border-radius: var(--radius-sm); padding: 10px 20px; font-size: 0.85rem; font-weight: 500; }
+  .copy-btn.copied{ background: #4a7c59; }
+  .actions-row{ display: flex; gap: 12px; margin-top: 16px; }
+  @media (max-width: 767px){ .site-nav{ padding: 20px 24px; } .page-title{ padding: 8px 24px 24px; } .panel{ padding: 24px; } #previewText{ font-size: 2rem; } }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="index.html" class="site-logo"><span class="logo-mark"></span>Shadowcraft</a>
+  <a href="index.html" class="back-link">← All tools</a>
+</nav>
+
+<div class="page-title">
+  <h1>Text Shadow</h1>
+  <p>Shape the offset, blur, and color — copy the CSS when it looks right.</p>
+</div>
+
+<div class="page-wrap">
+  <div class="row g-4">
+
+    <div class="col-12 col-lg-5">
+      <div class="panel h-100" id="controlsPanel">
+        <div class="control-group">
+          <div class="control-label"><span class="name">Horizontal Offset</span><span class="value" id="hOffsetValue">2px</span></div>
+          <input type="range" class="minimal-range" id="hOffset" min="-30" max="30" value="2">
+        </div>
+        <div class="control-group">
+          <div class="control-label"><span class="name">Vertical Offset</span><span class="value" id="vOffsetValue">2px</span></div>
+          <input type="range" class="minimal-range" id="vOffset" min="-30" max="30" value="2">
+        </div>
+        <div class="control-group">
+          <div class="control-label"><span class="name">Blur Radius</span><span class="value" id="blurValue">6px</span></div>
+          <input type="range" class="minimal-range" id="blur" min="0" max="50" value="6">
+        </div>
+        <div class="control-group">
+          <div class="control-label"><span class="name">Color &amp; Opacity</span><span class="value" id="opacityValue">40%</span></div>
+          <div class="color-picker-row" style="margin-bottom:12px;">
+            <input type="color" id="shadowColor" value="#3d3a34">
+            <span class="color-code" id="colorCode">rgba(61, 58, 52, 0.4)</span>
+          </div>
+          <input type="range" class="minimal-range" id="opacity" min="0" max="100" value="40">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-7">
+      <div class="panel h-100" id="previewPanel">
+        <div class="preview-stage"><div id="previewText" contenteditable="true">Preview Text</div></div>
+        <div class="code-block-label"><span>Generated CSS</span></div>
+        <textarea id="cssOutput" readonly spellcheck="false"></textarea>
+        <div class="actions-row">
+          <button class="copy-btn" id="copyBtn" type="button">Copy Code</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+  const hOffsetInput = document.getElementById('hOffset');
+  const vOffsetInput = document.getElementById('vOffset');
+  const blurInput = document.getElementById('blur');
+  const opacityInput = document.getElementById('opacity');
+  const colorInput = document.getElementById('shadowColor');
+
+  const hOffsetValue = document.getElementById('hOffsetValue');
+  const vOffsetValue = document.getElementById('vOffsetValue');
+  const blurValue = document.getElementById('blurValue');
+  const opacityValue = document.getElementById('opacityValue');
+  const colorCode = document.getElementById('colorCode');
+
+  const previewText = document.getElementById('previewText');
+  const cssOutput = document.getElementById('cssOutput');
+  const copyBtn = document.getElementById('copyBtn');
+
+  function hexToRgb(hex){
+    const c = hex.replace('#', '');
+    return `${parseInt(c.substring(0,2),16)}, ${parseInt(c.substring(2,4),16)}, ${parseInt(c.substring(4,6),16)}`;
+  }
+
+  function updateShadow(){
+    const h = hOffsetInput.value, v = vOffsetInput.value, blur = blurInput.value;
+    const opacity = (opacityInput.value / 100).toFixed(2);
+    const rgbaString = `rgba(${hexToRgb(colorInput.value)}, ${opacity})`;
+
+    hOffsetValue.textContent = `${h}px`;
+    vOffsetValue.textContent = `${v}px`;
+    blurValue.textContent = `${blur}px`;
+    opacityValue.textContent = `${opacityInput.value}%`;
+    colorCode.textContent = rgbaString;
+
+    const shadowValue = `${h}px ${v}px ${blur}px ${rgbaString}`;
+    previewText.style.textShadow = shadowValue;
+    cssOutput.value = `text-shadow: ${shadowValue};`;
+  }
+
+  [hOffsetInput, vOffsetInput, blurInput, opacityInput, colorInput].forEach(el => el.addEventListener('input', updateShadow));
+
+  copyBtn.addEventListener('click', async () => {
+    try{ await navigator.clipboard.writeText(cssOutput.value); }
+    catch(err){ cssOutput.select(); document.execCommand('copy'); }
+    copyBtn.textContent = 'Copied!'; copyBtn.classList.add('copied');
+    setTimeout(() => { copyBtn.textContent = 'Copy Code'; copyBtn.classList.remove('copied'); }, 1500);
+  });
+
+  updateShadow();
+
+  gsap.from(".site-nav", { opacity: 0, y: -16, duration: 0.5 });
+  gsap.from(".page-title", { opacity: 0, y: 16, duration: 0.5, delay: 0.1 });
+  gsap.from("#controlsPanel", { opacity: 0, x: -20, duration: 0.5, delay: 0.2 });
+  gsap.from("#previewPanel", { opacity: 0, x: 20, duration: 0.5, delay: 0.25 });
+</script>
+</body>
+</html>
