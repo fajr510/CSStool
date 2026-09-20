@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fajr510.github.io/CSStool/sitemap.xml
