@@ -59,6 +59,49 @@
   .tool-link .arrow{ transition: transform 0.15s ease; }
   .tool-card:hover .arrow{ transform: translateX(4px); }
 
+  .info-section{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 48px 90px;
+}
+.info-section h2{
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+.info-section h3{
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 28px 0 10px;
+}
+.info-section p{
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 0 4px;
+}
+.info-section ol{
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.9;
+  max-width: 640px;
+  padding-left: 22px;
+}
+.info-section code{
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 0.88em;
+  color: var(--text);
+}
+@media (max-width: 767px){
+  .info-section{ padding: 32px 24px 70px; }
+}
+
 
   @media (max-width: 767px){
     .site-nav{ padding: 20px 24px; flex-direction: column; gap: 14px; }
@@ -117,6 +160,28 @@
       </div>
     </div>
   </div>
+</section>
+
+<section class="info-section">
+    <h2>Free CSS Tools for Web Design</h2>
+    <p>
+        Shadowcraft is a collection of free CSS tools for creating
+        box shadows, text shadows, and CSS gradients. Adjust the
+        settings visually and generate CSS that you can copy directly
+        into your web projects.
+    </p>
+    <h3>CSS tools included in Shadowcraft</h3>
+    <p>
+        Create custom box shadows for cards, buttons, and other elements.
+        Build linear and radial gradients with custom colors and angles.
+        You can also create text shadows for depth, glow, and other
+        typography effects.
+    </p>
+    <h3>Copy ready-to-use CSS</h3>
+    <p>
+        Experiment with the controls, preview your result, and copy the
+        generated CSS directly into your project.
+    </p>
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
